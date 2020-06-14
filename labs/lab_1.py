@@ -19,14 +19,10 @@ def make_classes(class_shapes, name: str = 'ω') -> Iterable[ShapeClass]:
     return [ShapeClass(shapes, f"{name}{i}") for i, shapes in enumerate(class_shapes, 1)]
 
 
-def make_shapes(shape_coords, name: str = 'x') -> Iterable[Shape]:
-    return [Shape(coords, f"{name}{i}") for i, coords in enumerate(shape_coords, 1)]
-
-
 def main():
     print('Task 1; Two classes, 10 shapes')
     classes = make_classes([[[5, 6]], [[-3, -4]]])
-    shapes = make_shapes([
+    shapes = Shape.make_shapes([
         [3, 2], [-1, -2], [9, 4], [-4, 0], [4, -1],
         [0, -3], [0, 5], [-2, 2], [1, -3], [-3, 3],
     ])
@@ -34,7 +30,7 @@ def main():
 
     print('Task 2; Two classes, 20 shapes')
     classes = make_classes([[[2, 4], [3, 2]], [[-4, -2], [-1, -3], [-5, 0]]])
-    shapes = make_shapes([
+    shapes = Shape.make_shapes([
         [0, 5], [1, 4], [-1, 3], [1, 1], [2, 1],
         [1, 2], [-3, 2], [-2, -4], [2, -4], [-2, 5],
         [6, -2], [3, 4], [-2, 2], [-3, -3], [1, -5],

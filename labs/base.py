@@ -1,4 +1,4 @@
-from typing import Iterable, Union, SupportsFloat, Tuple, Optional
+from typing import Iterable, Union, SupportsFloat, Tuple, Optional, List
 
 import numpy as np
 
@@ -25,7 +25,12 @@ class Shape:
             coords = ', '.join(f"{coord:>6.3f}" for coord in self.coords)
         else:
             coords = ', '.join(f"{coord:>2}" for coord in self.coords)
-        return f'{self.name:>3} {{{coords}}}'
+        name = f'{self.name:>3} ' if self.name else ''
+        return f'{name}{{{coords}}}'
+
+    @classmethod
+    def make_shapes(cls, shape_coords, name: str = 'x') -> List['Shape']:
+        return [cls(coords, f"{name}{i}") for i, coords in enumerate(shape_coords, 1)]
 
     def distance(self, standard_shape: 'Shape'):
         return np.linalg.norm(self.coords - standard_shape.coords)
@@ -85,14 +90,8 @@ class ShapeClass:
         if self.shapes and not isinstance(self.shapes[0], Shape):
             self.shapes = list(map(Shape, self.shapes))
 
-    def __eq__(self, other: 'ShapeClass') -> bool:
-        return set(self.shapes) == set(other.shapes)
-
     def __repr__(self) -> str:
         return f'<StandardClass "{self.name}">'
 
     def __str__(self) -> str:
         return self.name
-
-    def __hash__(self):
-        return hash(tuple(self.shapes))
