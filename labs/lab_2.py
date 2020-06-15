@@ -73,7 +73,7 @@ class Cluster(dict):
         return np.sqrt(self.variance)
 
 
-def clusterize(shapes, center, max_distance) -> List[Cluster]:
+def clusterize(shapes: List[Shape], center: Shape, max_distance: int) -> List[Cluster]:
     shapes = [shape for shape in shapes if shape != center]
     clusters = [Cluster(center, 'c0')]
 
