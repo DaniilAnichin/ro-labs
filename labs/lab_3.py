@@ -224,7 +224,7 @@ def main():
         L=1,
         I=5,
     ))
-    print('Task 2.2; 20 shapes, 4 cluster, 2 initial centers')
+    print('Task 2.3; 20 shapes, 4 cluster, 2 initial centers')
     print_clusters(isodata_clusterize(
         shapes,
         initial_cluster_centers=[[0, 0], [9, 1]],
