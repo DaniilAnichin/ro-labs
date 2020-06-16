@@ -1,6 +1,7 @@
 """Based on python 2.7 lib https://github.com/PyRadar/pyradar"""
 from copy import deepcopy
 from pprint import pprint
+import matplotlib.pyplot as plt
 
 import numpy as np
 
@@ -61,6 +62,7 @@ def isodata_iteration(
             deviations_by_cluster.append([np.max(deviations), np.argmax(deviations)])
 
         # Step 10
+        clusters_to_remove = []
         for (center, shapes), (max_deviation, deviation_index), avg_distance in zip(
                 clusters.copy(), deviations_by_cluster,
                 cluster_average_distances,
@@ -82,8 +84,12 @@ def isodata_iteration(
                     else:
                         left_shapes.append(shape)
 
-                clusters.remove([center, shapes])
+                clusters_to_remove.append([center, shapes])
                 clusters.extend([[right_center, right_shapes], [left_center, left_shapes]])
+        clusters = [
+            cluster for cluster in clusters
+            if not any(np.allclose(cluster[0], to_remove[0]) for to_remove in clusters_to_remove)
+        ]
 
     if broken_cluster:
         return clusters
@@ -143,10 +149,24 @@ def isodata_clusterize(
 
 
 def print_clusters(clusters: list):
-    for center, shapes in clusters:
+    print(f'Got {len(clusters)} clusters')
+    fig, ax = plt.subplots()
+    plt.grid(True)
+    ax.minorticks_on()
+    ax.axis([-10, 10, -10, 10])
+    ax.grid(which='minor', color='k', linestyle=':')
+
+    colors = [
+        'go', 'ro', 'co', 'mo', 'yo', 'ko',
+        'go', 'ro', 'co', 'mo', 'yo', 'ko',
+        'go', 'ro', 'co', 'mo', 'yo', 'ko',
+    ]
+    for (center, shapes), color in zip(clusters, colors):
         print(f"Center: {center}")
         pprint(shapes)
+        ax.plot(*np.transpose(shapes), color)
     print()
+    plt.show()
 
 
 def main():
